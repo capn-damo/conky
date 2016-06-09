@@ -1,0 +1,159 @@
+## electro-1366.conkyrc
+## by damo - June 2016 <damo.linux@gmail.com>
+
+# The ring gauges are based on "conky_orange_4cpu" from gnome-look
+# Clock based on Clock Rings by londonali1010 (2009)
+#
+# GPU gauge needs ${nvidia temp}; font is Dustismo
+#
+# If you use relative paths for the script locations then use the syntax:
+#       ./script
+#
+# Weather data obtained with "bunsenweather.sh". Adjust the path to suit
+# You can specify a location by passing it as a parameter to the script:
+#       ./bunsenweather.sh [yourlocation]
+#
+# If no location is specified the script uses your ip geolocation
+#
+# BunsenLabs forum feed from "./e-BL-atomfeed.sh". Adjust the path to suit
+#
+# Change the lua_load and the ${image} paths to yours, as well as "disks text" 
+# "e-sm-rings.lua" is a wrapper script for running both 
+#   "e-sm-conky_clock_gauges.lua" and "e-sm-clock_rings.lua"
+#
+
+###  Begin Window Settings  #####################
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,skip_taskbar,skip_pager,sticky
+own_window_colour 000000
+own_window_class Conky
+own_window_title BL Electro 1366 Conky
+
+### ARGB can be used for real transparency
+### NOTE that a composite manager is required for real transparency.
+### This option will not work as desired (in most cases) in conjunction with
+### own_window_type normal
+#own_window_argb_visual yes # Options: yes or no
+
+### When ARGB visuals are enabled, use this to modify the alpha value
+### Use: own_window_type normal
+### Use: own_window_transparent no
+### Valid range is 0-255, where 0 is 0% opacity, and 255 is 100% opacity.
+#own_window_argb_value 0
+
+alignment tl
+gap_x 20
+gap_y 20
+minimum_size 1210 700  ### width | height
+maximum_width 1210
+
+#######################  End Window Settings  ###
+
+###  Font Settings  #############################
+# Use Xft (anti-aliased font and stuff)
+use_xft yes
+# fallback font
+xftfont Liberation Sans:size=10
+
+# Alpha of Xft font. Must be a value at or between 1 and 0 ###
+xftalpha 1
+# Force UTF8? requires XFT ###
+override_utf8_locale yes
+
+uppercase no
+#########################  End Font Settings  ###
+
+###  Color Settings  ############################
+draw_shades no #yes
+default_shade_color 000000
+draw_outline no # amplifies text if yes
+default_outline_color 000000
+
+#default_color 656667 # Waldorf original colour
+#default_color 7a7a7a # Flame  & Bunsen Grey
+#default_color 929292 # Labs Grey
+#default_color C0C0C0 # Silver
+default_color 7DA9D4
+color0 8AB8BF
+color1 A5B5C4
+color2 B6C5D7
+color3 141827
+color4 CD5C5C # IndianRed
+########################  End Color Settings  ###
+
+###  Borders Section  ###########################
+draw_borders no
+#stippled_borders 5
+border_inner_margin 0
+border_outer_margin 0
+border_width 2
+draw_graph_borders yes #no
+#default_graph_size 15 40
+#######################  End Borders Section  ###
+
+###  Miscellaneous Section  #####################
+# Boolean value, if true, Conky will be forked to background when started.
+background yes
+
+# Adds spaces around certain objects to stop them from moving other things
+# around, this only helps if you are using a mono font
+use_spacer none #right, left 
+
+# Default and Minimum size is 256 - needs more for single commands that
+# "call" a lot of text IE: bash scripts
+text_buffer_size 6144
+
+# Subtract (file system) buffers from used memory?
+no_buffers yes
+
+# change GiB to G and MiB to M
+short_units yes
+
+# Like it says, it pads the decimals on % values
+# doesn't seem to work since v1.7.1
+pad_percents 2
+
+# Imlib2 image cache size, in bytes. Default 4MiB Increase this value if you use
+# $image lots. Set to 0 to disable the image cache.
+imlib_cache_size 0
+
+# Use the Xdbe extension? (eliminates flicker)
+# It is highly recommended to use own window with this one
+# so double buffer won't be so big.
+double_buffer yes
+
+#   Maximum size of user text buffer, i.e. layout below TEXT line in config file
+#  (default is 16384 bytes)
+# max_user_text 16384
+
+# Desired output unit of all objects displaying a temperature. Parameters are
+# either "fahrenheit" or "celsius". The default unit is degree Celsius.
+# temperature_unit Fahrenheit
+
+update_interval 1
+#################  End Miscellaneous Section  ###
+# Change LUA path as appropriate
+lua_load e-sm-rings.lua
+lua_draw_hook_pre main
+
+###############################################
+TEXT
+# Change image and script paths as appropriate
+${image e-conky-1366.png}
+${voffset 20}${goto 180}${font Dustismo:size=20:bold}${color}${time %A}
+${voffset -10}${goto 205}${font Dustismo:size=36}${time %d}
+${voffset -16}${goto 210}${font Dustismo:size=24}${time %B}
+${voffset -12}${goto 96}${color}${font Liberation Mono:size=8}MO TU WE TH FR SA SU
+${goto 96}${color2}${execpi 1800 LAR=`date +%-d`; ncal -bh | sed '2d' | sed -e '1d' -e 's/\<'$LAR'\>/${color3}&${color2}/' | sed ':a;N;$!ba;s/\n/\n${goto 96}/g'}${color}${font}
+${voffset 60}${goto 100}${font Dustismo:size=10}${color0}${execpi 300 ./e-weather.sh}
+${voffset 60}${goto 40}${color0}${font Dustismo:size=8:bold}     root
+${voffset 1}${goto 40}     data
+${voffset 1}${goto 40}backups
+${voffset 140}${goto 263}${color}${font Dustismo:size=12}f o r u m  a t o m f e e d
+${font Dustismo:size=10}${color0}${execpi 10 ./e-BL-atomfeed.sh}
+${voffset -86}${goto 80}${color4}${exec sensors | grep temp1 | awk '{print substr($2,2,length($2)-3)}'}°c
+${voffset -5}${goto 120}${color0}${font Dustismo:size=10:bold}CPU
+${voffset 30}${goto 142}MEM
+${voffset 6}${goto 170}${font Dustismo:size=8}${kernel}${voffset -2}${alignr}${font Dustismo:size=12}${nodename}      

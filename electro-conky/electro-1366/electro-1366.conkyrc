@@ -4,20 +4,21 @@
 # The ring gauges are based on "conky_orange_4cpu" from gnome-look
 # Clock based on Clock Rings by londonali1010 (2009)
 #
-# GPU gauge needs ${nvidia temp}; font is Dustismo
+# GPU gauge (if enabled) needs ${nvidia temp}.
+# Font is Dustismo, but use what you like.
 #
 # If you use relative paths for the script locations then use the syntax:
 #       ./script
 #
-# Weather data obtained with "bunsenweather.sh". Adjust the path to suit
+# Weather data obtained with "e-weather.sh". Adjust the path to suit the script location.
 # You can specify a location by passing it as a parameter to the script:
-#       ./bunsenweather.sh [yourlocation]
+#       ./e-weather.sh [yourlocation]
 #
-# If no location is specified the script uses your ip geolocation
+# If no location is specified the script uses your ip geolocation.
 #
-# BunsenLabs forum feed from "./e-BL-atomfeed.sh". Adjust the path to suit
+# BunsenLabs forum feed from "./e-BL-atomfeed.sh". Adjust the path to suit.
 #
-# Change the lua_load and the ${image} paths to yours, as well as "disks text" 
+# Change the lua_load and the ${image} paths to yours, as well as "DISKS" args. 
 # "e-sm-rings.lua" is a wrapper script for running both 
 #   "e-sm-conky_clock_gauges.lua" and "e-sm-clock_rings.lua"
 #

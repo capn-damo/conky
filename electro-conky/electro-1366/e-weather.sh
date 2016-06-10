@@ -15,7 +15,8 @@
 #### User configurables:  ##############################################
 
 # Get API KEY by registering for one at http://openweathermap.org/api
-api="your very long api number"
+#api="your very long api number"
+api=""
 
 # Either set the location manually here, or by passing it as a script parameter in the Conky
 place="$1"
@@ -38,36 +39,50 @@ connectiontest() {
     done
 }
 
-connectiontest 10
-
-# If latlong is preferred then don't set a value for $place
-if (( $? == 0 ));then
-    if [[ -z $place ]];then
-        # Geolocate IP:
-        ipinfo=$(curl -s ipinfo.io)
-        latlong=$(echo $ipinfo | jq -r '.loc')
-        # Parse the latitude and longitude
-        lat=${latlong%,*}
-        long=${latlong#*,}
-        location="lat=$lat&lon=$long"
+placeholder() {
+    if (( $1 == 1 ));then
+        echo "\${goto 100}No internet connection"
+        echo "\${goto 100}  Weather information"
+        echo "\${goto 100}  unavailable"
     else
-        location="q=$place"
+        echo "\${goto 100}No API key"
+        echo "\${goto 100}  Weather information"
+        echo "\${goto 100}  unavailable"
     fi
+}
 
-    weather=$(curl -s http://api.openweathermap.org/data/2.5/weather\?APPID\=$api\&$location\&units\=${metric})
-    ### TODO: better to try and put the output into a jq array, to reduce the processes :/ ###
-    city=$(echo $weather | jq -r '.name')
-    temperature=$(printf '%.0f' $(echo $weather | jq '.main.temp'))
-    condition=$(echo $weather | jq -r '.weather[0].main')
-    wind=$(echo $weather | jq '.wind.speed')
-    winddir=$(echo $weather | jq '.wind.deg')
-    
-    # Format the output with printf
-    printf "%s: %s\n\${goto 100}Wind: %d m/s, from %.3d°\n\${goto 100}Temp: %d°c" "$city" "$condition" "$wind" "$winddir" "$temperature" 2>/dev/null
+if [[ -z "$api" ]] &>/dev/null;then
+    placeholder 0 && exit 1
 else
-    echo "\${goto 100}No internet connection"
-    echo "\${goto 100}  Weather information"
-    echo "\${goto 100}  unavailable"
+    connectiontest 10
+    
+    # If latlong is preferred then don't set a value for $place
+    if (( $? == 0 ));then
+        if [[ -z $place ]];then
+            # Geolocate IP:
+            ipinfo=$(curl -s ipinfo.io)
+            latlong=$(echo $ipinfo | jq -r '.loc')
+            # Parse the latitude and longitude
+            lat=${latlong%,*}
+            long=${latlong#*,}
+            location="lat=$lat&lon=$long"
+        else
+            location="q=$place"
+        fi
+    
+        weather=$(curl -s http://api.openweathermap.org/data/2.5/weather\?APPID\=$api\&$location\&units\=${metric})
+        ### TODO: better to try and put the output into a jq array, to reduce the processes :/ ###
+        city=$(echo $weather | jq -r '.name')
+        temperature=$(printf '%.0f' $(echo $weather | jq '.main.temp'))
+        condition=$(echo $weather | jq -r '.weather[0].main')
+        wind=$(echo $weather | jq '.wind.speed')
+        winddir=$(echo $weather | jq '.wind.deg')
+        
+        # Format the output with printf
+        printf "%s: %s\n\${goto 100}Wind: %d m/s, from %.3d°\n\${goto 100}Temp: %d°c" "$city" "$condition" "$wind" "$winddir" "$temperature" 2>/dev/null
+    else
+        placeholder 1
+    fi
 fi
 
 exit

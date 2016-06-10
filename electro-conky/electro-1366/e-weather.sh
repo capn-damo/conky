@@ -9,7 +9,7 @@
 ##          API Key from http://openweathermap.org/api
 ##
 ## USAGE: Call this script from Conky with ( replace "<t>" with the update interval)
-##          ${execpi <t> $HOME/.config/conky/scripts/bunsenweather.sh [location]}
+##          ${execpi <t> /path/to/e-weather.sh [location]}
 
 
 #### User configurables:  ##############################################

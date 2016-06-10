@@ -37,7 +37,7 @@ own_window_argb_visual yes # Options: yes or no
 own_window_argb_value 0
 
 alignment tl
-gap_x 1960
+gap_x 20
 gap_y 40
 minimum_size 1766 1000  ### width | height
 maximum_width 1766

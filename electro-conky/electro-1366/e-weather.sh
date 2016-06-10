@@ -27,7 +27,7 @@ metric='metric' && unit='C'
 
 #########################################################################
 connectiontest() {
-    local -i i attempts=${1-0}
+    local -i i attempts=${1-10}
     for (( i=0; i < attempts || attempts == 0; i++ )); do
         if wget -O - 'http://ftp.debian.org/debian/README' &> /dev/null; then
             return 0
@@ -37,6 +37,8 @@ connectiontest() {
         fi
     done
 }
+
+connectiontest
 
 # If latlong is preferred then don't set a value for $place
 if (( $? == 0 ));then

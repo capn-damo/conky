@@ -6,7 +6,7 @@
 URL="https://forums.bunsenlabs.org/extern.php?action=feed&type=atom"
 
 connectiontest() {
-    local -i i attempts=${1-0}
+    local -i i attempts=${1-10}
     for (( i=0; i < attempts || attempts == 0; i++ )); do
         if wget -O - 'http://ftp.debian.org/debian/README' &> /dev/null; then
             return 0
@@ -17,12 +17,13 @@ connectiontest() {
     done
 }
 
+connectiontest
+
 if (( $? == 0 ));then
     # Get 6 lines; trim to 50 chars; remove any '$' chars; add conky var code to beginning of line
     curl -s "$URL" | grep "<title" | grep -o -P '(?<=CDATA\[).*(?=\]\])'| tail -n +2 | head -n 6 | cut -c 1-50 | sed 's/\$//' | sed 's/^/${goto 263}/'  
 
 else
-    #echo "no connection"
     echo "\${goto 263}No internet connection"
     echo "\${goto 263}Forum feed unavailable"
     echo "\${goto 263}"

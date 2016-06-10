@@ -1,0 +1,122 @@
+## electro-1920.conkyrc
+## by damo - June 2016 <damo.linux@gmail.com>
+
+# The ring gauges are based on "conky_orange_4cpu" from gnome-look
+# Clock based on Clock Rings by londonali1010 (2009)
+#
+# GPU gauge (if enabled) needs ${nvidia temp}.
+# Font is Dustismo, but use what you like.
+#
+# If you use relative paths for the script locations then use the syntax:
+#       ./script
+#
+# Weather data obtained with "e-weather.sh". Adjust the path to suit the script location.
+# You can specify a location by passing it as a parameter to the script:
+#       ./e-weather.sh [yourlocation]
+#
+# If no location is specified the script uses your ip geolocation.
+#
+# BunsenLabs forum feed from "./e-BL-atomfeed.sh". Adjust the path to suit.
+#
+# Change the lua_load and the ${image} paths to yours, as well as "DISKS" args. 
+# "e-sm-rings.lua" is a wrapper script for running both 
+#   "e-sm-conky_clock_gauges.lua" and "e-sm-clock_rings.lua"
+#
+########################################################################
+
+###  Begin Window Settings  #####################
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,skip_taskbar,skip_pager,sticky
+own_window_colour 000000
+own_window_class Conky
+own_window_title BL Electro 1920 Conky
+
+own_window_argb_visual yes # Options: yes or no
+own_window_argb_value 0
+
+alignment tl
+gap_x 1960
+gap_y 40
+minimum_size 1766 1000  ### width | height
+maximum_width 1766
+
+use_xft yes
+xftfont Liberation Sans:size=10
+xftalpha 1
+override_utf8_locale yes
+
+uppercase no
+draw_shades no #yes
+default_shade_color 000000
+draw_outline no # amplifies text if yes
+default_outline_color 000000
+
+default_color 7DA9D4
+color0 8AB8BF
+color1 A5B5C4
+color2 B6C5D7
+color3 141827
+color4 CD5C5C 
+color5 55D5FF
+
+draw_borders no
+#stippled_borders 5
+border_inner_margin 0
+border_outer_margin 0
+border_width 2
+draw_graph_borders yes #no
+#default_graph_size 15 40
+
+# Boolean value, if true, Conky will be forked to background when started.
+background yes
+
+use_spacer none #right, left 
+
+text_buffer_size 6144
+
+no_buffers yes
+
+# change GiB to G and MiB to M
+short_units yes
+
+pad_percents 2
+
+imlib_cache_size 0
+
+double_buffer yes
+
+# max_user_text 16384
+# temperature_unit Fahrenheit
+
+update_interval 1
+
+####  Edit the path to where the lua scripts are kept.
+lua_load ~/.config/conky/LUA/e-rings.lua
+lua_draw_hook_pre main
+
+###############################################
+TEXT
+# Edit path to point to the background graphic
+${image e-conky-1920.png}
+${voffset 110}${goto 340}${font Dustismo:size=24:bold}${color}${time %A}
+${voffset -10}${goto 390}${font Dustismo:size=32}${time %d}
+${voffset -8}${goto 370}${font Dustismo:size=24}${time %B}
+${voffset -12}${goto 180}${color5}${font Liberation Mono:size=8}MO TU WE TH FR SA SU
+${goto 180}${color2}${execpi 1800 LAR=`date +%-d`; ncal -bh | sed '2d' | sed -e '1d' -e 's/\<'$LAR'\>/${color5}&${color2}/' | sed ':a;N;$!ba;s/\n/\n${goto 180}/g'}${color}${font}
+# Edit path to point to the weather script...
+${voffset 122}${goto 230}${font Dustismo:size=10}${color0}${execpi 300 ./e-weather.sh}
+# Labels for directory mounts - edit to suit...
+${voffset 35}${goto 120}${color0}${font Dustismo:size=8:bold}     root
+${voffset 1}${goto 120}     data
+${voffset 1}${goto 120}backups
+${voffset 262}${goto 358}${color}${font Dustismo:size=16}BL f o r u m  a t o m f e e d
+# Edit path to point to the atomfeed script...
+${font Dustismo:size=10}${color0}${execpi 10 ./e-BL-atomfeed.sh}
+${voffset -110}${goto 172}${color4}${exec sensors | grep temp1 | awk '{print substr($2,2,length($2)-3)}'}°c
+${voffset 5}${goto 195}${color0}${font Dustismo:size=10:bold}CPU
+${voffset 20}${goto 245}MEM
+${voffset 16}${goto 227}${color0}${font Dustismo:size=10}${color4}${nvidia temp}°c${color}
+${voffset -4}${goto 740}${font Dustismo:size=12}${kernel}$alignr${voffset -2}${nodename}     
+${voffset -40}${goto 257}gpu

@@ -93,7 +93,7 @@ double_buffer yes
 update_interval 1
 
 ####  Edit the path to where the lua scripts are kept.
-lua_load ~/.config/conky/LUA/e-rings.lua
+lua_load e-rings.lua
 lua_draw_hook_pre main
 
 ###############################################

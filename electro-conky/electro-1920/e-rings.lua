@@ -1,6 +1,6 @@
 --[[ wrapper script to call lua scripts in electro-1920.conkyrc --]]
 
-package.path = "?.lua"
+package.path = "?.lua"         --adjust path as necessary
 require 'e-conky_clock_gauges' --for scriptA.lua ".lua" is not required here
 require 'e-clock_rings'
 

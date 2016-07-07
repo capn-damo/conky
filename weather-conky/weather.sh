@@ -111,10 +111,15 @@ else
         sunrise=$(date -d @${all[10]} +"%R")
         sunset=$(date -d @${all[11]} +"%R")
         description="$weather_desc"
-        winddir=$(printf '%3.f%s' ${all[8]} °)
         
         winddir=${all[8]}
-        echo ${winddir%.*} > "$datafile"
+        if [[ $winddir = null ]];then
+            echo "$winddir" > "$datafile"
+        else
+            echo ${winddir%.*} > "$datafile"
+            winddir=$(printf '%3.f%s' $winddir} °)
+        fi
+        
         windspeed=$(echo ${all[7]}*1.9 | bc)
         windspeed=$(printf '%01.1f %s' "$windspeed" "kn")
         echo "$windspeed" >> "$datafile"

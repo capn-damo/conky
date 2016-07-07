@@ -1,0 +1,84 @@
+# pkill -xf "conky -q -c ~/.config/conky/test.conkyrc" &
+# Updated: Fri 30 Oct 2015
+
+### Begin Window Settings  ###################################################
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,skip_taskbar,skip_pager,sticky
+own_window_argb_visual no
+own_window_colour 252525
+own_window_class Conky
+own_window_title test
+
+# Use the Xdbe extension? (eliminates flicker)
+# It is highly recommended to use own window with this one
+# so double buffer won't be so big.
+double_buffer yes
+
+### ARGB can be used for real transparency
+### NOTE that a composite manager is required for real transparency.
+### This option will not work as desired (in most cases) in conjunction with
+### 'own_window_type normal '
+#own_window_argb_visual no
+
+### When ARGB visuals are enabled, this use this to modify the alpha value
+### Valid range is 0-255, where 0 is 0% opacity, and 255 is 100% opacity.
+#own_window_argb_value 0
+
+minimum_size 400 350     ## width, height
+maximum_width 400    ## width, usually a good idea to equal minimum width
+
+gap_x 20  # l|r
+gap_y 30  # u|d
+
+alignment tr
+####################################################  End Window Settings  ###
+###  Font Settings  ##########################################################
+# Use Xft (anti-aliased font and stuff)
+use_xft yes
+xftfont Dustismo:size=10
+
+# Alpha of Xft font. Must be a value at or between 1 and 0 ###
+xftalpha 0.5
+# Force UTF8? requires XFT ###
+override_utf8_locale yes
+######################################################  End Font Settings  ###
+###  Color Settings  #########################################################
+default_color FFFFFF
+draw_shades yes
+default_shade_color 000000
+draw_outline no
+default_outline_color 000000
+#####################################################  End Color Settings  ###
+###  Borders Section  ########################################################
+draw_borders no
+# Stippled borders?
+stippled_borders 0
+# border margins
+border_inner_margin 10
+border_outer_margin 0
+# border width
+border_width 0
+# graph borders
+draw_graph_borders no
+#####################################################  End Borders Secton  ###
+###  Miscellaneous Section  ##################################################
+# Boolean value, if true, Conky will be forked to background when started.
+background yes
+
+# Adds spaces around certain objects to stop them from moving other things
+# around, this only helps if you are using a mono font
+# Options: right, left or none
+use_spacer none
+
+# Subtract (file system) buffers from used memory?
+no_buffers yes
+update_interval 1
+############################
+lua_load /path/to/weather.lua
+lua_draw_hook_pre conky_main
+############################ End LUA Settings ###
+
+TEXT
+${execi <interval> /path/to/weather.sh [location]}
